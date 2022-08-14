@@ -5,6 +5,7 @@ import (
 
 	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
+	"gonum.org/v1/gonum/stat/distuv"
 )
 
 type anovaTableMeansResult struct {
@@ -88,17 +89,29 @@ func (anovaInput *AnovaInput) CalculateAnovaTable(alpha float64) AnovaTable {
 	ssr := calculateSSR(&meansResult)
 	sse := calculateSSE(&groupedDataPointValues, &meansResult)
 	sst := calculateSST(ssr, sse)
+	// See: https://www.statology.org/one-way-anova-by-hand/
 	n := float64(len(anovaInput.DataPoints))  // # of observations
 	k := float64(len(meansResult.GroupMeans)) // # of results
-	anovaTable.DfTreatment = k - 1
+	anovaTable.DfRegression = k - 1
 	anovaTable.DfError = n - k
 	anovaTable.DfTotal = n - 1
-	anovaTable.MSTreatment = ssr / anovaTable.DfTreatment
+	anovaTable.MSRegression = ssr / anovaTable.DfRegression
 	anovaTable.MSError = math.Round((sse/anovaTable.DfError)*100) / 100
-	anovaTable.SSTreatment = ssr
+	anovaTable.SSRegression = ssr
 	anovaTable.SSError = sse
 	anovaTable.SSTotal = sst
-	anovaTable.F = math.Round((anovaTable.MSTreatment/anovaTable.MSError)*1000) / 1000
 
+	// Round to 3x decimal places
+	anovaTable.F = math.Round((anovaTable.MSRegression/anovaTable.MSError)*1000) / 1000
+
+	// See: https://pkg.go.dev/gonum.org/v1/gonum/stat/distuv#F
+	var f = distuv.F{
+		D1: anovaTable.DfRegression,
+		D2: anovaTable.DfError,
+	}
+	// Round to 6x decimal places
+	anovaTable.P = math.Round((1-f.CDF(anovaTable.F))*1000000) / 1000000
+	anovaTable.Q = math.Round((f.Quantile(alpha))*1000000) / 1000000
+	anovaTable.Significant = anovaTable.P <= alpha
 	return anovaTable
 }

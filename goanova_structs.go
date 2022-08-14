@@ -10,9 +10,11 @@ type AnovaInput struct {
 }
 
 type AnovaTable struct {
-	SSTreatment, SSTotal, SSError float64
-	DfTreatment, DfTotal, DfError float64
-	MSTreatment, MSTotal, MSError float64
-	F                             float64
-	P                             float64
+	SSRegression, SSTotal, SSError float64
+	DfRegression, DfTotal, DfError float64
+	MSRegression, MSTotal, MSError float64
+	F                              float64
+	P                              float64
+	Q                              float64
+	Significant                    bool
 }

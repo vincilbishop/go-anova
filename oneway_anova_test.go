@@ -174,16 +174,20 @@ func TestCalculateSST(t *testing.T) {
 
 func TestCalculateAnovaResult(t *testing.T) {
 	input := GetOneWayAnovaInput()
-	actual := input.CalculateAnovaTable(0.5)
+	alpha := 0.05 // Alpha level (designated threshold of significance)
+	actual := input.CalculateAnovaTable(alpha)
 	assert.NotNil(t, actual)
-	assert.Equal(t, float64(2), actual.DfTreatment)
+	assert.Equal(t, float64(2), actual.DfRegression)
 	assert.Equal(t, float64(27), actual.DfError)
 	assert.Equal(t, float64(29), actual.DfTotal)
-	assert.Equal(t, float64(96.1), actual.MSTreatment)
+	assert.Equal(t, float64(96.1), actual.MSRegression)
 	assert.Equal(t, float64(40.76), actual.MSError)
-	assert.Equal(t, float64(192.2), actual.SSTreatment)
+	assert.Equal(t, float64(192.2), actual.SSRegression)
 	assert.Equal(t, float64(1100.6), actual.SSError)
 	assert.Equal(t, float64(1292.8), actual.SSTotal)
 
 	assert.Equal(t, float64(2.358), actual.F)
+	assert.Equal(t, float64(0.113803), actual.P)
+	assert.Equal(t, float64(0.051391), actual.Q)
+	assert.Equal(t, false, actual.Significant)
 }

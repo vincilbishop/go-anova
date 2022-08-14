@@ -6,6 +6,8 @@ See:
 
 Based on these instructions:
 * https://www.statology.org/one-way-anova-by-hand/
+* https://www.statology.org/one-way-anova/
+* https://www.socscistatistics.com/pvalues/fdistribution.aspx
 
 Inspiration taken from the following sources:
 * https://github.com/paulidealiste/Cephalopod
