@@ -188,6 +188,7 @@ func TestCalculateAnovaResult(t *testing.T) {
 
 	assert.Equal(t, float64(2.358), actual.F)
 	assert.Equal(t, float64(0.113803), actual.P)
-	assert.Equal(t, float64(0.051391), actual.Q)
+	// Since this p-value is not less than 0.05
+	// we fail to reject the null hypothesis
 	assert.Equal(t, false, actual.Significant)
 }

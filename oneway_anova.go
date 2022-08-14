@@ -111,7 +111,6 @@ func (anovaInput *AnovaInput) CalculateAnovaTable(alpha float64) AnovaTable {
 	}
 	// Round to 6x decimal places
 	anovaTable.P = math.Round((1-f.CDF(anovaTable.F))*1000000) / 1000000
-	anovaTable.Q = math.Round((f.Quantile(alpha))*1000000) / 1000000
 	anovaTable.Significant = anovaTable.P <= alpha
 	return anovaTable
 }

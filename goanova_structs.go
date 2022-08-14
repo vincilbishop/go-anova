@@ -15,6 +15,5 @@ type AnovaTable struct {
 	MSRegression, MSTotal, MSError float64
 	F                              float64
 	P                              float64
-	Q                              float64
 	Significant                    bool
 }
