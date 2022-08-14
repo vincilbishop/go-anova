@@ -174,7 +174,7 @@ func TestCalculateSST(t *testing.T) {
 
 func TestCalculateAnovaResult(t *testing.T) {
 	input := GetOneWayAnovaInput()
-	actual := input.CalculateAnovaTable()
+	actual := input.CalculateAnovaTable(0.5)
 	assert.NotNil(t, actual)
 	assert.Equal(t, float64(2), actual.DfTreatment)
 	assert.Equal(t, float64(27), actual.DfError)
