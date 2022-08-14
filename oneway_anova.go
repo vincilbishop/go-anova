@@ -81,6 +81,7 @@ func calculateSST(ssr float64, sse float64) float64 {
 	return ssr + sse
 }
 
+// Calculates an Anova table on an instance of AnoveInput
 func (anovaInput *AnovaInput) CalculateAnovaTable(alpha float64) AnovaTable {
 	var anovaTable = AnovaTable{}
 	meansResult := anovaInput.anovaTableMeansResult()
