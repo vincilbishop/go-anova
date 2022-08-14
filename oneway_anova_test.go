@@ -119,10 +119,10 @@ func TestGroupedDataPoints(t *testing.T) {
 	}
 }
 
-func TestGroupedDataPointValues(t *testing.T) {
+func TestGetGroupedDataPointValues(t *testing.T) {
 	input := GetOneWayAnovaInput()
 	groupedDataPoints := input.groupedDataPoints()
-	actual := groupedDataPointValues(&groupedDataPoints)
+	actual := getGroupedDataPointValues(&groupedDataPoints)
 	assert.NotNil(t, actual)
 
 	for _, value := range actual {
@@ -141,8 +141,49 @@ func TestAnovaTableMeansResult(t *testing.T) {
 	assert.Equal(t, 85.8, actual.OverallMean)
 }
 
-func TestOneWayAnova(t *testing.T) {
+func TestCalculateSSR(t *testing.T) {
+	input := GetOneWayAnovaInput()
+	meansResult := input.anovaTableMeansResult()
+	actual := calculateSSR(&meansResult)
+	assert.NotNil(t, actual)
+	assert.Equal(t, 192.2, actual)
+}
 
-	// input := GetOneWayAnovaInput()
-	// OneWayAnova()
+func TestCalculateSSE(t *testing.T) {
+	input := GetOneWayAnovaInput()
+	meansResult := input.anovaTableMeansResult()
+	groupedDataPoints := input.groupedDataPoints()
+	groupedDataPointValues := getGroupedDataPointValues(&groupedDataPoints)
+	actual := calculateSSE(&groupedDataPointValues, &meansResult)
+	assert.NotNil(t, actual)
+	assert.Equal(t, 1100.6, actual)
+}
+
+func TestCalculateSST(t *testing.T) {
+	input := GetOneWayAnovaInput()
+	meansResult := input.anovaTableMeansResult()
+	groupedDataPoints := input.groupedDataPoints()
+	groupedDataPointValues := getGroupedDataPointValues(&groupedDataPoints)
+	ssr := calculateSSR(&meansResult)
+	sse := calculateSSE(&groupedDataPointValues, &meansResult)
+	actual := calculateSST(ssr, sse)
+	assert.NotNil(t, actual)
+	assert.Equal(t, 1292.8, actual)
+
+}
+
+func TestCalculateAnovaResult(t *testing.T) {
+	input := GetOneWayAnovaInput()
+	actual := input.CalculateAnovaTable()
+	assert.NotNil(t, actual)
+	assert.Equal(t, float64(2), actual.DfTreatment)
+	assert.Equal(t, float64(27), actual.DfError)
+	assert.Equal(t, float64(29), actual.DfTotal)
+	assert.Equal(t, float64(96.1), actual.MSTreatment)
+	assert.Equal(t, float64(40.76), actual.MSError)
+	assert.Equal(t, float64(192.2), actual.SSTreatment)
+	assert.Equal(t, float64(1100.6), actual.SSError)
+	assert.Equal(t, float64(1292.8), actual.SSTotal)
+
+	assert.Equal(t, float64(2.358), actual.F)
 }

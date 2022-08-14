@@ -9,10 +9,10 @@ type AnovaInput struct {
 	DataPoints []AnovaDataPoint
 }
 
-type AnovaResult struct {
-	SSM, SST, SSE float64
-	Dfm, Dft, Dfe float64
-	MSM, MST, MSE float64
-	F             float64
-	P             float64
+type AnovaTable struct {
+	SSTreatment, SSTotal, SSError float64
+	DfTreatment, DfTotal, DfError float64
+	MSTreatment, MSTotal, MSError float64
+	F                             float64
+	P                             float64
 }
