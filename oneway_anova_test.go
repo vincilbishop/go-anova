@@ -6,106 +6,45 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func GetOneWayAnovaInput() AnovaInput {
-	// Values taken from here: https://www.statology.org/one-way-anova-by-hand/
-	oneWayAnoveInput := AnovaInput{
-		DataPoints: []AnovaDataPoint{
-			{
-				Value: 85,
-				Group: "Group1",
-			},
-			{
-				Value: 86,
-				Group: "Group1",
-			}, {
-				Value: 88,
-				Group: "Group1",
-			}, {
-				Value: 75,
-				Group: "Group1",
-			}, {
-				Value: 78,
-				Group: "Group1",
-			}, {
-				Value: 94,
-				Group: "Group1",
-			}, {
-				Value: 98,
-				Group: "Group1",
-			}, {
-				Value: 79,
-				Group: "Group1",
-			}, {
-				Value: 71,
-				Group: "Group1",
-			}, {
-				Value: 80,
-				Group: "Group1",
-			},
-			{
-				Value: 91,
-				Group: "Group2",
-			}, {
-				Value: 92,
-				Group: "Group2",
-			}, {
-				Value: 93,
-				Group: "Group2",
-			}, {
-				Value: 85,
-				Group: "Group2",
-			}, {
-				Value: 87,
-				Group: "Group2",
-			}, {
-				Value: 84,
-				Group: "Group2",
-			}, {
-				Value: 82,
-				Group: "Group2",
-			}, {
-				Value: 88,
-				Group: "Group2",
-			}, {
-				Value: 95,
-				Group: "Group2",
-			}, {
-				Value: 96,
-				Group: "Group2",
-			}, {
-				Value: 79,
-				Group: "Group3",
-			}, {
-				Value: 78,
-				Group: "Group3",
-			}, {
-				Value: 88,
-				Group: "Group3",
-			}, {
-				Value: 94,
-				Group: "Group3",
-			}, {
-				Value: 92,
-				Group: "Group3",
-			}, {
-				Value: 85,
-				Group: "Group3",
-			}, {
-				Value: 83,
-				Group: "Group3",
-			}, {
-				Value: 85,
-				Group: "Group3",
-			}, {
-				Value: 82,
-				Group: "Group3",
-			}, {
-				Value: 81,
-				Group: "Group3",
-			},
-		},
+func GetGroupOneValues() []float64 {
+	return []float64{
+		85, 86, 88, 75, 78, 94, 98, 79, 71, 80,
 	}
-	return oneWayAnoveInput
+}
+
+func GetGroupTwoValues() []float64 {
+	return []float64{
+		91, 92, 93, 85, 87, 84, 82, 88, 95, 96,
+	}
+}
+
+func GetGroupThreeValues() []float64 {
+	return []float64{
+		79, 78, 88, 94, 92, 85, 83, 85, 82, 81,
+	}
+}
+
+func GetOneWayAnovaInput() *AnovaInput {
+	// Values taken from here: https://www.statology.org/one-way-anova-by-hand/
+
+	oneWayAnoveInput := AnovaInput{}
+
+	oneWayAnoveInput.AddDataPointGroup("Group1", GetGroupOneValues())
+	oneWayAnoveInput.AddDataPointGroup("Group2", GetGroupTwoValues())
+	oneWayAnoveInput.AddDataPointGroup("Group3", GetGroupThreeValues())
+
+	return &oneWayAnoveInput
+}
+
+func TestAddDataPointGroup(t *testing.T) {
+	input := GetOneWayAnovaInput()
+	actual := input.groupedDataPoints()
+	assert.NotNil(t, actual)
+
+	for _, value := range actual {
+		assert.NotNil(t, value)
+		assert.Equal(t, 10, len(value))
+	}
 }
 
 func TestGroupedDataPoints(t *testing.T) {

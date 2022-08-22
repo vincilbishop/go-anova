@@ -13,7 +13,16 @@ type anovaTableMeansResult struct {
 	OverallMean float64
 }
 
-func OneWayAnova() {}
+func (anovaInput *AnovaInput) AddDataPointGroup(groupName string, values []float64) {
+
+	for _, value := range values {
+		dataPoint := AnovaDataPoint{
+			Value: value,
+			Group: groupName,
+		}
+		anovaInput.Append(&dataPoint)
+	}
+}
 
 // Gets a map of each group in the input
 func (anovaInput *AnovaInput) groupedDataPoints() map[string][]AnovaDataPoint {
